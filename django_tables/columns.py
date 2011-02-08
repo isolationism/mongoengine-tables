@@ -85,22 +85,4 @@ class TextColumn(Column):
     pass
 
 class NumberColumn(Column):
-    """A special type of column for displaying number values, which are 
-    conventionally right-aligned."""
-    
-    def __init__(self, *args, **kwargs):
-        Column.__init__(self, *args, **kwargs)
-        if not self.attrs.has_key('align'):
-            self.attrs['align'] = 'right'
-
-class NoWrapColumn(Column):
-    """A column which will not wrap to multiple lines. You may wish to contain
-    data within an additional "div" or "span" tag which has the "overflow" 
-    property set to hidden/scroll/auto, as appropriate -- otherwise it may
-    make your tables unexpectedly and inconveniently wide."""
-    
-    def __init__(self, *args, **kwargs):
-        # Column.__init__(self, *args, **kwargs)
-        if not self.attrs.has_key('nowrap'):
-            self.attrs['nowrap'] = 'nowrap'
-        
+    pass
