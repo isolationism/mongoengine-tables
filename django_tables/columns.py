@@ -1,7 +1,7 @@
 import copy
 
 __all__ = (
-    'Column', 'TextColumn', 'NumberColumn', 'NoWrapColumn',
+    'Column', 'TextColumn', 'NumberColumn',
 )
 
 class Column(object):
