@@ -368,8 +368,13 @@ class BoundRow(object):
     def _default_render(self, column):
         """Returns a cell's content. This is used unless the user
         provides a custom ``render_FOO`` method.
+
+        Enhanced to use both property in addition to subscription-style notation
         """
-        result = self.data[column.accessor]
+        if hasattr(self.data, column.accessor):
+            result = getattr(self.data, column.accessor)
+        else:
+            result = self.data[column.accessor]
 
         # if the field we are pointing to is a callable, remove it
         if callable(result):
