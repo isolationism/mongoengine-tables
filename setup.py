@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+import sys
 from distutils.core import setup
 
 
@@ -28,6 +29,11 @@ def find_packages(root):
     return packages
 
 
+requirements = []
+if sys.version_info[0] == 2 and sys.version_info[1] < 7:
+    requirements += ['ordereddict',]
+
+
 setup(
     name = 'mogoengine-tables',
     version=".".join(map(str, version)),
@@ -45,4 +51,5 @@ setup(
         'Topic :: Software Development :: Libraries',
         ],
     packages = find_packages('mongoengine_tables'),
+    install_requires = requirements,
 )

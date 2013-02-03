@@ -1,4 +1,1 @@
-django-tables - a Django QuerySet renderer.
-
-Documentation:
-    http://elsdoerfer.name/docs/django-tables/
+mongoengine-tables - A mongoengine queryset renderer based on django-tables.
