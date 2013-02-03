@@ -36,7 +36,7 @@ if sys.version_info[0] == 2 and sys.version_info[1] < 7:
 
 setup(
     name = 'mogoengine-tables',
-    version=".".join(map(str, version)),
+    version = '0.1',
     description = 'Render QuerySets as tabular data in MongoEngine.',
     license = 'BSD',
     url = 'https://github.com/isolationism/mongoengine-tables',
