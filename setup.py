@@ -19,7 +19,7 @@ if sys.version_info[0] == 2 and sys.version_info[1] < 7:
 
 
 setup(
-    name = 'mogoengine-tables',
+    name = 'mongoengine-tables',
     version = '0.1',
     description = 'Render QuerySets as tabular data in MongoEngine.',
     license = 'BSD',
