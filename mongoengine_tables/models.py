@@ -1,5 +1,8 @@
-from django.core.exceptions import FieldError
-from django.utils.datastructures import SortedDict
+from mongoengine.queryset import InvalidQueryError
+try:
+    from collections import OrderedDict
+except ImportError:
+    from ordereddict import OrderedDict
 from base import BaseTable, DeclarativeColumnsMetaclass, \
     Column, BoundRow, Rows, TableOptions, rmprefix, toggleprefix
 
@@ -17,7 +20,7 @@ class ModelTableOptions(TableOptions):
 
 def columns_for_model(model, columns=None, exclude=None):
     """
-    Returns a ``SortedDict`` containing form columns for the given model.
+    Returns an ``OrderedDict`` containing form columns for the given model.
 
     ``columns`` is an optional list of field names. If provided, only the
     named model fields will be included in the returned column list.
@@ -36,9 +39,9 @@ def columns_for_model(model, columns=None, exclude=None):
         column = Column(verbose_name=f.verbose_name) # TODO: chose correct column type, with right options
         if column:
             field_list.append((f.name, column))
-    field_dict = SortedDict(field_list)
+    field_dict = OrderedDict(field_list)
     if columns:
-        field_dict = SortedDict(
+        field_dict = OrderedDict(
             [(c, field_dict.get(c)) for c in columns
                 if ((not exclude) or (exclude and c not in exclude))]
         )
@@ -210,7 +213,7 @@ class ModelTable(BaseTable):
                         from django.db import DEFAULT_DB_ALIAS
                         _temp.get_compiler(DEFAULT_DB_ALIAS).as_sql()
                     break
-                except FieldError:
+                except InvalidQueryError:
                     pass
             else:
                 return False

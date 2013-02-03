@@ -1,9 +1,9 @@
 import copy
-from django.http import Http404
-from django.core import paginator
-from django.utils.datastructures import SortedDict
-from django.utils.encoding import force_unicode, StrAndUnicode
-from django.utils.text import capfirst
+try:
+    from collections import OrderedDict
+except ImportError:
+    from ordereddict import OrderedDict
+from borrowed import force_unicode, StrAndUnicode
 from columns import Column
 from options import options
 
@@ -70,8 +70,8 @@ class DeclarativeColumnsMetaclass(type):
         # An example would be:
         #    class MyNewTable(MyOldNonModelTable, tables.ModelTable): pass
         if not 'base_columns' in attrs:
-            attrs['base_columns'] = SortedDict()
-        attrs['base_columns'].update(SortedDict(columns))
+            attrs['base_columns'] = OrderedDict()
+        attrs['base_columns'].update(OrderedDict(columns))
 
         attrs['_meta'] = TableOptions(attrs.get('Meta', None))
         return type.__new__(cls, name, bases, attrs)
@@ -178,17 +178,17 @@ class Columns(object):
     """
     def __init__(self, table):
         self.table = table
-        self._columns = SortedDict()
+        self._columns = OrderedDict()
 
     def _reset(self):
         """Used by parent table class."""
-        self._columns = SortedDict()
+        self._columns = OrderedDict()
 
     def _spawn_columns(self):
         # (re)build the "_columns" cache of BoundColumn objects (note that
         # ``base_columns`` might have changed since last time); creating
         # BoundColumn instances can be costly, so we reuse existing ones.
-        new_columns = SortedDict()
+        new_columns = OrderedDict()
         for decl_name, column in self.table.base_columns.items():
             # take into account name overrides
             exposed_name = column.name or decl_name
@@ -331,7 +331,7 @@ class BoundColumn(StrAndUnicode):
 
     def __unicode__(self):
         s = self.column.verbose_name or self.name.replace('_', ' ')
-        return capfirst(force_unicode(s))
+        return force_unicode(s).capitalize()
 
     def as_html(self):
         pass
@@ -617,12 +617,14 @@ class BaseTable(object):
         self._build_snapshot()
 
     def paginate(self, klass, *args, **kwargs):
+        # TODO: Who calls this method, and what is the value of `klass`?
         page = kwargs.pop('page', 1)
         self.paginator = klass(self.rows, *args, **kwargs)
         try:
             self.page = self.paginator.page(page)
-        except paginator.InvalidPage, e:
-            raise Http404(str(e))
+        except Exception:
+            raise # Hope the paginator raises a useful exception.
+
 
 class Cell(object):
     """A simple cell object that can have its own representation as well as a

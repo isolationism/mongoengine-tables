@@ -39,7 +39,7 @@ class Column(object):
     in ordering. You can further change the *default* sort direction to
     descending using ``direction``. Note that this option changes the actual
     direction only indirectly. Normal und reverse order, the terms
-    django-tables exposes, now simply mean different things.
+    this module exposes, now simply mean different things.
     """
 
     ASC = 1
