@@ -4,22 +4,6 @@ import sys
 from distutils.core import setup
 
 
-import re
-here = os.path.dirname(os.path.abspath(__file__))
-version_re = re.compile(
-    r'__version__ = (\(.*?\))')
-fp = open(os.path.join(here, 'mongoengine_tables', '__init__.py'))
-version = None
-for line in fp:
-    match = version_re.search(line)
-    if match:
-        version = eval(match.group(1))
-        break
-else:
-    raise Exception("Cannot find version in __init__.py")
-fp.close()
-
-
 def find_packages(root):
     # so we don't depend on setuptools; from the Storm ORM setup.py
     packages = []
